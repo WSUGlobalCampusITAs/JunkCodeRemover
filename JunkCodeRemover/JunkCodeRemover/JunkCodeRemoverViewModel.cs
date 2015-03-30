@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MVVMObjectLibrary;
 using Ganss.XSS;
 using System.Windows.Input;
+using JunkCodeRemover.Properties;
 
 namespace JunkCodeRemover
 {
@@ -19,10 +20,25 @@ namespace JunkCodeRemover
         {
             _sanitizeCommand = new RelayCommand(Sanitize);
             _sanitizer = new HtmlSanitizer();
-            _sanitizer.AllowedCssProperties.Remove("color");
-            _sanitizer.AllowedCssProperties.Remove("font-family");
-            _sanitizer.AllowedCssProperties.Remove("font-size");
-            _sanitizer.AllowedCssProperties.Remove("line-height");
+            _sanitizer.AllowedTags.Clear();
+            _sanitizer.AllowedCssProperties.Clear();
+            _html = "Paste HTML Code Here";
+
+             var splitstring = Settings.Default.AllowedTags.Split(',');
+
+            foreach (string tag in splitstring)
+            {
+                _sanitizer.AllowedTags.Add(tag.Trim());
+            }
+
+            splitstring = Settings.Default.AllowedStyles.Split(',');
+
+            foreach (string tag in splitstring)
+            {
+                _sanitizer.AllowedCssProperties.Add(tag.Trim());
+            }
+ 
+
         }
 
         private void Sanitize(object obj)
@@ -39,5 +55,7 @@ namespace JunkCodeRemover
             get { return _html; }
             set { _html = value; }
         }
+
+
     }
 }

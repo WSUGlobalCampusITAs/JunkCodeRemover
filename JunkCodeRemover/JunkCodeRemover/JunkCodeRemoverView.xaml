@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
             >
-    <Grid Height="400" Width="500">
+    <Grid Height="550" Width="580">
         <Grid.RowDefinitions>
-            <RowDefinition Height="31*"/>
-            <RowDefinition Height="9*"/>
+            <RowDefinition Height="22*"/>
+            <RowDefinition Height="235*"/>
+            <RowDefinition Height="18*"/>
         </Grid.RowDefinitions>
-        <TextBox Margin="0" AcceptsReturn="True" Text="{Binding HTML}" />
-        <Button Grid.Row="1" Margin="2" Command="{Binding SanitizeCommand}"/>
+        <TextBlock Text="Junk Code Remover" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBox Margin="0" AcceptsReturn="True" Text="{Binding HTML}" Grid.Row="1" />
+        <Button Grid.Row="2" Margin="100, 2, 100, 2" Content="Clear Formatting" Command="{Binding SanitizeCommand}"/>
     </Grid>
 </UserControl>
