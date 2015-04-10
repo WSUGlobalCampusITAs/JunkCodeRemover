@@ -24,7 +24,9 @@ namespace JunkCodeRemover
             _sanitizer.AllowedCssProperties.Clear();
             _html = "Paste HTML Code Here";
 
-             var splitstring = Settings.Default.AllowedTags.Split(',');
+            //using a string splitter variable to hold the tags after they 
+            //are seperated from the Allowed Tags or Styles settings. 
+            var splitstring = Settings.Default.AllowedTags.Split(',');
 
             foreach (string tag in splitstring)
             {
@@ -37,10 +39,13 @@ namespace JunkCodeRemover
             {
                 _sanitizer.AllowedCssProperties.Add(tag.Trim());
             }
- 
 
         }
 
+        /// <summary>
+        /// Using the HtmlSanitizer class, it clears the undesired html code from the string. 
+        /// </summary>
+        /// <param name="obj"></param>
         private void Sanitize(object obj)
         {           
             var sanitized = _sanitizer.Sanitize(_html);

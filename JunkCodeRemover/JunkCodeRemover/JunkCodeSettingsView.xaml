@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="JunkCodeRemover.JunkCodeSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="40*"/>
+        </Grid.RowDefinitions>
+        
+        <TextBox Grid.Column="1" Grid.ColumnSpan="2"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <TextBlock Text="Allowed Tags" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="Allowed Styles" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+        <TextBlock Text="Allowed Attributes" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2"/>
+        <Button Grid.Row="3"  Margin="10" Content="Save" Command="{Binding SaveCommand}" />
+        <Button Grid.Row="3" Margin="10" Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}" />
+        
+    </Grid>
+</UserControl>

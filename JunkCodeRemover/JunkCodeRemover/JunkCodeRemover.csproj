@@ -64,9 +64,17 @@
       <DependentUpon>JunkCodeRemoverView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="JunkCodeSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JunkCodeRemoverViewModel.cs" />
+    <Compile Include="JunkCodeSettingsView.xaml.cs">
+      <DependentUpon>JunkCodeSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JunkCodeSettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
