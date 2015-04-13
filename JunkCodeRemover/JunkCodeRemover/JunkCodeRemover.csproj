@@ -61,6 +61,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AllowedItemModel.cs" />
+    <Compile Include="AllowedItemRepository.cs" />
     <Compile Include="JunkCodeRemoverView.xaml.cs">
       <DependentUpon>JunkCodeRemoverView.xaml</DependentUpon>
       <SubType>Code</SubType>

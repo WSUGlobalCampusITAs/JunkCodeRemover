@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JunkCodeRemover" x:Class="JunkCodeRemover.JunkCodeRemoverView" 
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             d:DesignHeight="500" d:DesignWidth="600"
             >
-    <Grid Height="550" Width="580">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15*"/>
             <ColumnDefinition Width="43*"/>
@@ -16,13 +17,17 @@
             <RowDefinition Height="235*"/>
             <RowDefinition Height="18*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Junk Code Remover" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Margin="86,10,186,10" Height="24" Width="158"/>
-        <TextBox Margin="10" AcceptsReturn="True" Text="{Binding HTML}" Grid.Row="1" Grid.Column="1" />
+        <TextBlock Text="Junk Code Remover" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Padding="2"/>
+        <ScrollViewer Margin="10" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <TextBox  AcceptsReturn="True" Text="{Binding HTML}"  />
+        </ScrollViewer>
         <Button Grid.Row="2" Margin="19,2,100,2" Content="Clear Formatting" Command="{Binding SanitizeCommand}" Grid.Column="1"/>
-        <ListView Grid.Row="1" Background="{x:Null}" Foreground="White">
-            <TreeViewItem Header="Tags" Foreground="White" ItemsSource="{Binding AllowedTags}"/>
-            <TreeViewItem Header="Styles" Foreground="White" ItemsSource="{Binding AllowedStyles}"/>
-            <TreeViewItem Header="Attributes" Foreground="White" ItemsSource="{Binding AllowedAttributes}"/>
-        </ListView>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ListView  Background="{x:Null}" Foreground="White">
+                <TreeViewItem Header="Tags" Foreground="White" ItemsSource="{Binding AllowedTags}" ScrollViewer.CanContentScroll="True"/>
+                <TreeViewItem Header="Styles" Foreground="White" ItemsSource="{Binding AllowedStyles}" ScrollViewer.CanContentScroll="True"/>
+                <TreeViewItem Header="Attributes" Foreground="White" ItemsSource="{Binding AllowedAttributes}" ScrollViewer.CanContentScroll="True"/>
+            </ListView>
+        </ScrollViewer>
     </Grid>
 </UserControl>
