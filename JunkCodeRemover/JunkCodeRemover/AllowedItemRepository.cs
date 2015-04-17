@@ -12,13 +12,16 @@ namespace JunkCodeRemover
         private List<AllowedItemModel> _tagsList;
         private List<AllowedItemModel> _stylesList;
         private List<AllowedItemModel> _attributesList;
+        private List<AllowedItemModel> _htmlpropertiesList;
+        private List<AllowedItemModel> _uriAttributes;
 
         public AllowedItemRepository()
         {
             _tagsList = new List<AllowedItemModel>();
             _stylesList = new List<AllowedItemModel>();
             _attributesList = new List<AllowedItemModel>();
-
+            _htmlpropertiesList = new List<AllowedItemModel>();
+            _uriAttributes = new List<AllowedItemModel>();
             //using a string splitter variable to hold the tags after they 
             //are seperated from the Allowed Tags or Styles settings. 
             var splitstring = Settings.Default.AllowedTags.Split(',');
@@ -41,10 +44,12 @@ namespace JunkCodeRemover
             {
                 _attributesList.Add(new AllowedItemModel(tag.Trim()));
             }
+
         }
 
         public List<AllowedItemModel> Tags { get { return _tagsList; } }
         public List<AllowedItemModel> Styles { get { return _stylesList; } }
         public List<AllowedItemModel> Attributes { get { return _attributesList; } }
+        public List<AllowedItemModel> URIAttributes { get { return _uriAttributes; } }
     }
 }

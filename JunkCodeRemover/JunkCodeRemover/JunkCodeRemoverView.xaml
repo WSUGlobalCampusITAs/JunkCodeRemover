@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:JunkCodeRemover" x:Class="JunkCodeRemover.JunkCodeRemoverView" 
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="600"
+            
             >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,7 +20,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Junk Code Remover" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Padding="2"/>
         <ScrollViewer Margin="10" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <TextBox  AcceptsReturn="True" Text="{Binding HTML}"  />
+            <TextBox  AcceptsReturn="True" Text="{Binding HTML}" TextOptions.TextFormattingMode="Ideal"  />
         </ScrollViewer>
         <Button Grid.Row="2" Margin="19,2,100,2" Content="Clear Formatting" Command="{Binding SanitizeCommand}" Grid.Column="1"/>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

@@ -14,7 +14,7 @@ namespace JunkCodeRemover
         public AllowedItemModel(string ItemName)
         {
             _itemName = ItemName;
-            _isChecked = true;
+            _isChecked = false;
         }
 
         public string ItemName { get { return _itemName; } }

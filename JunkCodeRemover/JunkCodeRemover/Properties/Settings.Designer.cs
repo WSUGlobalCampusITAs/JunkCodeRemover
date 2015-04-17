@@ -58,5 +58,17 @@ namespace JunkCodeRemover.Properties {
                 this["AllowedAttributes"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BlackListOptions {
+            get {
+                return ((string)(this["BlackListOptions"]));
+            }
+            set {
+                this["BlackListOptions"] = value;
+            }
+        }
     }
 }

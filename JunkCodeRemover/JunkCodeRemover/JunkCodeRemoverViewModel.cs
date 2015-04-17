@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MVVMObjectLibrary;
-using Ganss.XSS;
 using System.Windows.Input;
 using JunkCodeRemover.Properties;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Westwind.Web.Utilities;
 
 namespace JunkCodeRemover
 {
@@ -22,21 +22,22 @@ namespace JunkCodeRemover
         private Visibility _settingsViewVisibility;
         private ObservableCollection<CheckBox> _allowedTags;
         private ObservableCollection<CheckBox> _allowedStyles;
-        private ObservableCollection<CheckBox> _allowedAttributes;
+        private ObservableCollection<CheckBox> _allowedAttributes; 
+        private ObservableCollection<CheckBox> _allowedHTMLProperties;
         private AllowedItemRepository _repository;
 
         public JunkCodeRemoverViewModel()
         {
             _sanitizeCommand = new RelayCommand(Sanitize);
             _sanitizer = new HtmlSanitizer();
-            _sanitizer.AllowedTags.Clear();
-            _sanitizer.AllowedCssProperties.Clear();
+
             _html = "Paste HTML Code Here";
             this.SettingsCommand = new RelayCommand(DisplaySettings);
             _settingsViewVisibility = Visibility.Hidden;
             _allowedTags = new ObservableCollection<CheckBox>();
             _allowedStyles = new ObservableCollection<CheckBox>();
             _allowedAttributes = new ObservableCollection<CheckBox>();
+            _allowedHTMLProperties = new ObservableCollection<CheckBox>();
             _repository = new AllowedItemRepository();
  
             foreach(AllowedItemModel item in _repository.Tags)
@@ -65,6 +66,7 @@ namespace JunkCodeRemover
                 cbItem.Foreground = Brushes.White;
                 _allowedAttributes.Add(cbItem);
             }
+
         }
 
         /// <summary>
@@ -73,16 +75,14 @@ namespace JunkCodeRemover
         /// <param name="obj"></param>
         private void Sanitize(object obj)
         {
-
-            _sanitizer.AllowedTags.Clear();
-            _sanitizer.AllowedAttributes.Clear();
-            _sanitizer.AllowedCssProperties.Clear();
+            
+            HashSet<string> blacklist = new HashSet<string>();
 
             foreach (CheckBox item in _allowedTags)
             {
                 if((bool)item.IsChecked)
                 { 
-                    _sanitizer.AllowedTags.Add((string)item.Content);
+                    blacklist.Add((string)item.Content);
                 }
             }
 
@@ -90,7 +90,7 @@ namespace JunkCodeRemover
             {
                 if ((bool)item.IsChecked)
                 {
-                    _sanitizer.AllowedCssProperties.Add((string)item.Content);
+                    blacklist.Add((string)item.Content);
                 }
             }
 
@@ -98,10 +98,11 @@ namespace JunkCodeRemover
             {
                 if ((bool)item.IsChecked)
                 {
-                    _sanitizer.AllowedAttributes.Add((string)item.Content);
+                    blacklist.Add((string)item.Content);
                 }
             }
 
+            _sanitizer.BlackList = blacklist;
             var sanitized = _sanitizer.Sanitize(_html);
             _html = sanitized;
             OnPropertyChanged("HTML");
@@ -119,6 +120,7 @@ namespace JunkCodeRemover
         public ObservableCollection<CheckBox> AllowedTags { get { return _allowedTags; } }
         public ObservableCollection<CheckBox> AllowedAttributes { get { return _allowedAttributes; } }
         public ObservableCollection<CheckBox> AllowedStyles { get { return _allowedStyles; } }
+        public ObservableCollection<CheckBox> AllowedHTMLProperties { get { return _allowedHTMLProperties; } }
 
         public string HTML 
         { 
