@@ -11,12 +11,21 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Westwind.Web.Utilities;
+using System.Windows.Data;
+using System.Xml;
+using HtmlAgilityPack;
+using Highlight;
+using Highlight.Engines;
+using System.Windows.Documents;
+using System.IO;
+
 
 namespace JunkCodeRemover
 {
     public class JunkCodeRemoverViewModel : ViewModelBase 
     {
-        private string _html;
+        private FlowDocument _html;
+        private string _htmlsource;
         private ICommand _sanitizeCommand;
         private HtmlSanitizer _sanitizer;
         private Visibility _settingsViewVisibility;
@@ -25,13 +34,16 @@ namespace JunkCodeRemover
         private ObservableCollection<CheckBox> _allowedAttributes; 
         private ObservableCollection<CheckBox> _allowedHTMLProperties;
         private AllowedItemRepository _repository;
+        private FlowDocumentConverter _converter;
 
         public JunkCodeRemoverViewModel()
         {
+            
             _sanitizeCommand = new RelayCommand(Sanitize);
             _sanitizer = new HtmlSanitizer();
-
-            _html = "Paste HTML Code Here";
+            _converter = new FlowDocumentConverter();
+            _htmlsource = "Paste HTML Code Here";
+            this.HTML = _converter.Convert(_htmlsource, _htmlsource.GetType(), null, System.Globalization.CultureInfo.DefaultThreadCurrentUICulture) as FlowDocument;
             this.SettingsCommand = new RelayCommand(DisplaySettings);
             _settingsViewVisibility = Visibility.Hidden;
             _allowedTags = new ObservableCollection<CheckBox>();
@@ -39,6 +51,8 @@ namespace JunkCodeRemover
             _allowedAttributes = new ObservableCollection<CheckBox>();
             _allowedHTMLProperties = new ObservableCollection<CheckBox>();
             _repository = new AllowedItemRepository();
+            
+            
  
             foreach(AllowedItemModel item in _repository.Tags)
             {
@@ -77,6 +91,8 @@ namespace JunkCodeRemover
         {
             
             HashSet<string> blacklist = new HashSet<string>();
+            
+            _htmlsource = _converter.ConvertBack(HTML, HTML.GetType(), null, System.Globalization.CultureInfo.DefaultThreadCurrentCulture) as string;
 
             foreach (CheckBox item in _allowedTags)
             {
@@ -103,9 +119,9 @@ namespace JunkCodeRemover
             }
 
             _sanitizer.BlackList = blacklist;
-            var sanitized = _sanitizer.Sanitize(_html);
-            _html = sanitized;
-            OnPropertyChanged("HTML");
+            var sanitized = _sanitizer.Sanitize(_htmlsource);
+            HTML = _converter.Convert(sanitized, HTML.GetType(), null, System.Globalization.CultureInfo.DefaultThreadCurrentUICulture) as FlowDocument;
+           
         }
 
         public void DisplaySettings(object obj)
@@ -122,12 +138,102 @@ namespace JunkCodeRemover
         public ObservableCollection<CheckBox> AllowedStyles { get { return _allowedStyles; } }
         public ObservableCollection<CheckBox> AllowedHTMLProperties { get { return _allowedHTMLProperties; } }
 
-        public string HTML 
+        public FlowDocument HTML 
         { 
             get { return _html; }
-            set { _html = value; }
+            set 
+            { 
+                _html = value;
+                OnPropertyChanged("HTML");
+            }
         }
 
-
     }
+
+        public class DivisionConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                double divideBy = double.Parse(parameter as string);
+                double input = (double)value;
+                return input / divideBy;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        public class FlowDocumentConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType,
+                object parameter, System.Globalization.CultureInfo culture)
+            {
+                FlowDocument document = new FlowDocument();
+
+                string s = value as string;
+                if (s != null)
+                {
+                            var highlight = new Highlighter(new RtfEngine());
+                            var highlighted = highlight.Highlight("HTML", s);
+                    {
+                    
+                        document.SetValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                        TextRange content = new TextRange(document.ContentStart, document.ContentEnd);
+
+                        if (content.CanLoad(DataFormats.Rtf) && string.IsNullOrEmpty(highlighted) == false)
+                        {
+                            // If so then load it with RTF
+                            byte[] valueArray = Encoding.ASCII.GetBytes(highlighted);
+                            using (MemoryStream stream = new MemoryStream(valueArray))
+                            {
+                                content.Load(stream, DataFormats.Rtf);
+                            }
+                        }
+                    
+                    }
+                }
+                return document;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                FlowDocument doc = value as FlowDocument;
+
+                var tr = new TextRange(doc.ContentStart, doc.ContentEnd);
+
+                return tr.Text;
+            }
+        }
+
+    public class BindableRichTextBox : RichTextBox
+    {
+        public static readonly DependencyProperty DocumentProperty =
+            DependencyProperty.Register("Document", typeof(FlowDocument),
+            typeof(BindableRichTextBox), new FrameworkPropertyMetadata
+            (null, new PropertyChangedCallback(OnDocumentChanged)));
+
+        public new FlowDocument Document
+        {
+            get
+            {
+                return (FlowDocument)this.GetValue(DocumentProperty);
+            }
+
+            set
+            {
+                this.SetValue(DocumentProperty, value);
+            }
+        }
+
+        public static void OnDocumentChanged(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            RichTextBox rtb = (RichTextBox)obj;
+            rtb.Document = (FlowDocument)args.NewValue;
+        }
+    }
+
+
 }

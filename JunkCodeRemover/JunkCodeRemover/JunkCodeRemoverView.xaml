@@ -8,6 +8,11 @@
              d:DesignHeight="500" d:DesignWidth="600"
             
             >
+    <UserControl.Resources>
+        <local:FlowDocumentConverter x:Key="FlowDocumentConverter"/>
+        <local:DivisionConverter x:Key="DivisionConverter"/>
+        <ZoomPercentageConverter x:Key="ZoomPercentageConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15*"/>
@@ -19,12 +24,11 @@
             <RowDefinition Height="18*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Junk Code Remover" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Padding="2"/>
-        <ScrollViewer Margin="10" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <TextBox  AcceptsReturn="True" Text="{Binding HTML}" TextOptions.TextFormattingMode="Ideal"  />
-        </ScrollViewer>
-        <Button Grid.Row="2" Margin="19,2,100,2" Content="Clear Formatting" Command="{Binding SanitizeCommand}" Grid.Column="1"/>
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <ListView  Background="{x:Null}" Foreground="White">
+        <local:BindableRichTextBox Document="{Binding HTML}" Margin="10" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <Button Grid.Row="2" Margin="25, 5" Content="Remove Formatting" Command="{Binding SanitizeCommand}" Grid.Column="1" Background="{x:Null}" Foreground="White"/>
+        <ScrollViewer x:Name="scrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+            <ListView x:Name="listView"  Background="{x:Null}" Foreground="White">
+                <TextBlock Padding="10" Text="To Remove an unwated HTML Tag, CSS Style, or Attribute select the attibute in the appropriate sections below." Width="{Binding ActualWidth, ConverterParameter=1.1, Converter={StaticResource DivisionConverter}, ElementName=scrollViewer, Mode=OneWay}" TextWrapping="Wrap" TextAlignment="Center"  />
                 <TreeViewItem Header="Tags" Foreground="White" ItemsSource="{Binding AllowedTags}" ScrollViewer.CanContentScroll="True"/>
                 <TreeViewItem Header="Styles" Foreground="White" ItemsSource="{Binding AllowedStyles}" ScrollViewer.CanContentScroll="True"/>
                 <TreeViewItem Header="Attributes" Foreground="White" ItemsSource="{Binding AllowedAttributes}" ScrollViewer.CanContentScroll="True"/>
