@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using MVVMObjectLibrary;
 using System.Windows.Input;
 using System.Windows;
@@ -8,12 +6,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Westwind.Web.Utilities;
-using System.Windows.Data;
-using Highlight;
-using Highlight.Engines;
-using System.Windows.Documents;
-using System.IO;
-using Xceed.Wpf.Toolkit;
 
 
 namespace JunkCodeRemover
@@ -30,7 +22,6 @@ namespace JunkCodeRemover
         private ObservableCollection<CheckBox> _allowedAttributes; 
         private ObservableCollection<CheckBox> _allowedHTMLProperties;
         private AllowedItemRepository _repository;
-        private Highlighter _highlighter;
         #endregion
 
         #region Constructors
@@ -38,7 +29,6 @@ namespace JunkCodeRemover
         {
             _sanitizeCommand = new RelayCommand(Sanitize);
             _sanitizer = new HtmlSanitizer();
-            _highlighter = new Highlighter(new HtmlEngine());
             _html = "Paste HTML Code Here";        
             this.SettingsCommand = new RelayCommand(DisplaySettings);
             _settingsViewVisibility = Visibility.Hidden;
