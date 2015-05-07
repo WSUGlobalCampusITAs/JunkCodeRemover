@@ -4,6 +4,8 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Documents;
+using System.Xml;
+using System.Xml.Linq;
 using Xceed.Wpf.Toolkit;
 
 namespace JunkCodeRemover
@@ -25,8 +27,14 @@ namespace JunkCodeRemover
             output = output.Replace(@"&lt;", @"<");
             output = output.Replace(@"&gt;", @">");
             output = output.Replace(@"&quot;", "\"");
+            while (output != output.Replace(@"&amp;", @"&"))
+            {
+                output = output.Replace(@"&amp;", @"&");
+            }   
 
             TextRange selection = new TextRange(document.ContentStart, document.ContentEnd);
+
+            
 
             if (selection.CanLoad(DataFormats.Rtf) && string.IsNullOrEmpty(output) == false)
             {

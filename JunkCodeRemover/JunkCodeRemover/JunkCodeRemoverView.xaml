@@ -23,7 +23,7 @@
             <RowDefinition Height="18*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Junk Code Remover" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Padding="2"/>
-        <xctk:RichTextBox AcceptsTab="True" AcceptsReturn="True" Text="{Binding HTML}" Margin="10" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <xctk:RichTextBox AcceptsTab="True" AcceptsReturn="True" Text="{Binding HTML,IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Margin="10" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <xctk:RichTextBox.TextFormatter>
                 <local:HtmlSyntaxFormatter/>
             </xctk:RichTextBox.TextFormatter>
