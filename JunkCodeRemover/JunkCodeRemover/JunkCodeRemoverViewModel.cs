@@ -15,6 +15,7 @@ namespace JunkCodeRemover
         #region Member Variables
         private string _html;
         private ICommand _sanitizeCommand;
+        private ICommand _selectAllCommand;
         private HtmlSanitizer _sanitizer;
         private Visibility _settingsViewVisibility;
         private ObservableCollection<CheckBox> _allowedTags;
@@ -22,12 +23,15 @@ namespace JunkCodeRemover
         private ObservableCollection<CheckBox> _allowedAttributes; 
         private ObservableCollection<CheckBox> _allowedHTMLProperties;
         private AllowedItemRepository _repository;
+        private bool _allChecked;
         #endregion
 
         #region Constructors
         public JunkCodeRemoverViewModel()
         {
+            _allChecked = false;
             _sanitizeCommand = new RelayCommand(Sanitize);
+            _selectAllCommand = new RelayCommand(SelectAll);
             _sanitizer = new HtmlSanitizer();
             _html = "Paste HTML Code Here";        
             this.SettingsCommand = new RelayCommand(DisplaySettings);
@@ -45,6 +49,7 @@ namespace JunkCodeRemover
         #region Properties
         public Visibility SettingsViewVisibility { get { return this._settingsViewVisibility; } }
 
+        public ICommand SelectAllCommand { get { return _selectAllCommand; } }
         public ICommand SanitizeCommand { get { return _sanitizeCommand; } }
 
         public ObservableCollection<CheckBox> AllowedTags { get { return _allowedTags; } }
@@ -64,6 +69,55 @@ namespace JunkCodeRemover
         #endregion
 
         #region Methods
+
+        private void SelectAll(object obj)
+        {
+            foreach(CheckBox cb in AllowedTags)
+            {
+                if(_allChecked)
+                {
+                    cb.IsChecked = false;
+                }
+                else
+                {
+                    cb.IsChecked = true;
+                }
+            }
+            foreach (CheckBox cb in AllowedAttributes)
+            {
+                if (_allChecked)
+                {
+                    cb.IsChecked = false;
+                }
+                else
+                {
+                    cb.IsChecked = true;
+                }
+            }
+            foreach (CheckBox cb in AllowedStyles)
+            {
+                if (_allChecked)
+                {
+                    cb.IsChecked = false;
+                }
+                else
+                {
+                    cb.IsChecked = true;
+                }
+            }
+            foreach (CheckBox cb in AllowedHTMLProperties)
+            {
+                if (_allChecked)
+                {
+                    cb.IsChecked = false;
+                }
+                else
+                {
+                    cb.IsChecked = true;
+                }
+            }
+            _allChecked = !_allChecked;
+        }
         /// <summary>
         /// Using the HtmlSanitizer class, it clears the undesired html code from the string. 
         /// </summary>

@@ -24,5 +24,11 @@ namespace JunkCodeRemover
         {
             InitializeComponent();
         }
+
+        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //this.OnPropertyChanged(new DependencyPropertyChangedEventArgs(e.OriginalSource as DependencyProperty, e.OriginalSource as RichTextBox, e.Source as RichTextBo
+            //MessageBox.Show("Hello World");
+        }
     }
 }
