@@ -16,6 +16,7 @@ namespace JunkCodeRemover
     /// </summary>
     class HtmlSyntaxFormatter : ITextFormatter
     {
+        string input;
         public string GetText(System.Windows.Documents.FlowDocument document)
         {
             return new TextRange(document.ContentStart, document.ContentEnd).Text;
@@ -30,7 +31,11 @@ namespace JunkCodeRemover
             while (output != output.Replace(@"&amp;", @"&"))
             {
                 output = output.Replace(@"&amp;", @"&");
-            }   
+            }
+            output = output.Replace(@"“", "\"");
+            output = output.Replace(@"”", "\"");
+            output = output.Replace(@"’", "'");
+            
 
             TextRange selection = new TextRange(document.ContentStart, document.ContentEnd);
 
