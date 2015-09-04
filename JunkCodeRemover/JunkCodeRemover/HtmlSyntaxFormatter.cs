@@ -16,7 +16,6 @@ namespace JunkCodeRemover
     /// </summary>
     class HtmlSyntaxFormatter : ITextFormatter
     {
-        string input;
         public string GetText(System.Windows.Documents.FlowDocument document)
         {
             return new TextRange(document.ContentStart, document.ContentEnd).Text;
@@ -25,6 +24,8 @@ namespace JunkCodeRemover
         public void SetText(System.Windows.Documents.FlowDocument document, string text)
         {
             string output = (new Highlighter(new RtfEngine())).Highlight("HTML", text);
+            //The following set of code is to fix a issue regarding the html encoding done by the Highlighter. 
+
             output = output.Replace(@"&lt;", @"<");
             output = output.Replace(@"&gt;", @">");
             output = output.Replace(@"&quot;", "\"");
@@ -32,19 +33,15 @@ namespace JunkCodeRemover
             {
                 output = output.Replace(@"&amp;", @"&");
             }
-            output = output.Replace(@"“", "\"");
-            output = output.Replace(@"”", "\"");
-            output = output.Replace(@"’", "'");
+
+
+
+            TextRange selection = new TextRange(document.ContentStart, document.ContentEnd);  
             
-
-            TextRange selection = new TextRange(document.ContentStart, document.ContentEnd);
-
-            
-
             if (selection.CanLoad(DataFormats.Rtf) && string.IsNullOrEmpty(output) == false)
             {
-                // If so then load it with RTF
-                byte[] valueArray = Encoding.ASCII.GetBytes(output);
+                // If so then load it with RTF, using UTF8 encoding to allow more variety of characters than ASCII
+                byte[] valueArray = Encoding.UTF8.GetBytes(output);
                 using (MemoryStream stream = new MemoryStream(valueArray))
                 {
                     selection.Load(stream, DataFormats.Rtf);

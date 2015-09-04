@@ -30,5 +30,17 @@ namespace JunkCodeRemover
             //this.OnPropertyChanged(new DependencyPropertyChangedEventArgs(e.OriginalSource as DependencyProperty, e.OriginalSource as RichTextBox, e.Source as RichTextBo
             //MessageBox.Show("Hello World");
         }
+
+        private void cbHTMLView_Checked(object sender, RoutedEventArgs e)
+        {
+            rtbhtml.Visibility = Visibility.Visible;
+            
+        }
+
+        private void cbHTMLView_Unchecked(object sender, RoutedEventArgs e)
+        {
+            rtbhtml.Visibility = Visibility.Hidden;
+            
+        }
     }
 }
